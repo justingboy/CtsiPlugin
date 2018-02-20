@@ -1,6 +1,5 @@
 // 应用插件
 apply plugin: 'com.jfrog.bintray'
-apply plugin: 'maven-publish'
 
 def baseUrl = 'https://github.com/justingboy'
 def siteUrl = baseUrl
@@ -65,12 +64,24 @@ bintray {
     pkg {
         repo = 'maven' // 上传到中央仓库的名称
         name = 'webp-plugin' // 上传到jcenter 的项目名称
-        desc = 'This is an plugin for picture of png ,jpg,jpeg, and so on to convert webp format !' // 项目描述
+        desc = 'This is an plugin for picture of png ,jpg,jpeg, and so on to convert webp format !'
+        // 项目描述
         websiteUrl = siteUrl
         issueTrackerUrl = issueUrl
         vcsUrl = gitUrl
         labels = ['gradle', 'plugin']
         licenses = ['Apache-2.0']
         publish = true
+    }
+}
+
+//发布到本地仓库
+apply plugin: 'maven'
+uploadArchives{
+    repositories.mavenDeployer{
+        // 本地仓库路径
+        repository(url:"file://D://Program Files/maven/.m2/repo/")
+        // 项目名称
+        pom.artifactId = "webp-plugin"
     }
 }

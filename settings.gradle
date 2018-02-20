@@ -1,1 +1,1 @@
-include ':app', ':webp-plugin'
+include ':app', ':webp-plugin', ':7zShark-plugin'

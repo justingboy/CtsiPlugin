@@ -39,7 +39,7 @@ class WebpOptimizerTask extends DefaultTask {
 
     @TaskAction
     def run() {
-        project.logger.error "==============================optimizer================================="
+        project.logger.error "==============================start convert to Webp================================="
         /**
          * 1、解析AndroidManifest.xml获得 app的icon(以及roundIcon)
          */
