@@ -23,7 +23,6 @@ class WebpOptimizerTask extends DefaultTask {
     int apiLevel
 
 
-
     def webpTool
     def jpgTool
     def pngTool
@@ -55,8 +54,7 @@ class WebpOptimizerTask extends DefaultTask {
         if (null != round_launcher)
             round_launcher = round_launcher.substring(round_launcher.lastIndexOf("/") + 1, round_launcher.length())
         else round_launcher = ""
-       // round_launcher = round_launcher.substring(round_launcher.lastIndexOf("/") + 1, round_launcher.length())
-
+        // round_launcher = round_launcher.substring(round_launcher.lastIndexOf("/") + 1, round_launcher.length())
 
         /**
          * 2、遍历需要打包的res资源目录 获得所有图片资源
@@ -93,23 +91,23 @@ class WebpOptimizerTask extends DefaultTask {
                     project.logger.error "   ${it.name} has alpha channel,don't convert webp"
                 } else {
                     //转换webp
-                    convertWebp(webpTool, it,pngNotConvert)
+                    convertWebp(webpTool, it, pngNotConvert)
                 }
             }
             //压缩 png
             compressImg(pngTool, true, compress)
             //jpeg本身就不带alpha 都可以转换为webp
             jpgs.each {
-                convertWebp(webpTool, it,jpegsNotConvert)
+                convertWebp(webpTool, it, jpegsNotConvert)
             }
 
         } else if (apiLevel >= 18) {
             //能够使用有透明的webp
             pngs.each {
-                convertWebp(webpTool, it,pngNotConvert)
+                convertWebp(webpTool, it, pngNotConvert)
             }
             jpgs.each {
-                convertWebp(webpTool, it,jpegsNotConvert)
+                convertWebp(webpTool, it, jpegsNotConvert)
             }
         } else {
             //不能使用webp 进行压缩
@@ -127,14 +125,16 @@ class WebpOptimizerTask extends DefaultTask {
     }
 
     //cwebp  -q quality in.png -o out.webp
-    def convertWebp(String tool, File file,def noValidConvert) {
+    def convertWebp(String tool, File file, def noValidConvert) {
         //转换wenp
         def name = file.name
         name = name.substring(0, name.lastIndexOf("."))
         def output = new File(file.parent, "${name}.webp")
         //google 建议75的质量
-        def result = "$tool -q 75 ${file.absolutePath} -o ${output.absolutePath}"
-                .execute()
+        def quality = project.webpConfig.quality
+
+        def result = "$tool -q $quality ${file.absolutePath} -o ${output.absolutePath}".execute()
+
         result.waitFor()
         if (result.exitValue() == 0) {
             def rawlen = file.length()

@@ -1,6 +1,6 @@
 package com.ctsi.plugin.webp
 
 class WebpOptimizerExtensions {
-    def quality
-    def webpEnabled
+    int quality = 75
+    boolean webpEnabled = true
 }
